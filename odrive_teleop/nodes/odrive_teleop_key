@@ -68,7 +68,7 @@ settings = termios.tcgetattr(sys.stdin)
 rospy.init_node('odrive_teleop_key')
 
 pub = rospy.Publisher(
-    '/turtle1/cmd_vel',
+    '/cmd_vel',
     Twist,
     queue_size=5
 )
