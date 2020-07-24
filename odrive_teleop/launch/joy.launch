@@ -1,0 +1,17 @@
+<launch>
+  <node name="joy_node" pkg="joy" type="joy_node">
+    <param name="dev" value="/dev/input/js0"/>
+    <param name="coalesce_interval" value="0.02"/>
+    <param name="autorepeat_rate" value="30.0"/>
+  </node>
+
+  <node name="odrive_teleop_joy" pkg="odrive_teleop" type="odrive_teleop_joy">
+    <rosparam command="load" file="$(find odrive_teleop)/config/joy_mapping.yaml"/>
+    <param name="scale_linear" value="0.4"/>
+    <param name="scale_angular" value="2.0"/>
+  </node>
+
+  <node name="odrive" pkg="odrive_ros" type="odrive_node.py">
+
+  </node>
+</launch>

@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+import rospy
+
+from geometry_msgs.msg import Twist
+from sensor_msgs.msg import Joy
+
+rospy.init_node("odrive_teleop_joy")
+
+axis_linear = rospy.get_param("~axis_linear", 1)
+axis_angular = rospy.get_param("~axis_angular", 3)
+scale_linear = rospy.get_param("~scale_linear", 0.4)
+scale_angular = rospy.get_param("~scale_angular", 3.0)
+
+cmd_pub = rospy.Publisher(
+    "cmd_vel",
+    Twist,
+    queue_size=1
+)
+
+
+def joy_callback(joy):
+    value_linear = joy.axes[axis_linear]
+    value_angular = joy.axes[axis_angular]
+    speed_linear = value_linear * scale_linear
+    speed_angular = value_angular * scale_angular
+
+    cmd = Twist()
+    cmd.linear.x = speed_linear
+    cmd.angular.z = speed_angular
+
+    cmd_pub.publish(cmd)
+
+
+rospy.Subscriber("joy", Joy, joy_callback)
+
+rospy.spin()
